@@ -54,5 +54,15 @@ pipeline {
                 //sh 'kubectl rollout restart deployment loadbalancer-pod'
             }
         }
+	
+	 stage('Deploy Approve') {
+		 steps {
+		 	echo "Taking approval from Manager for Deployment"
+			 timeout(time: 7, unit: 'DAYS') {
+			 	input message: 'Do you want to deploy?', submitter: 'admin'
+			 }
+		 }  
+	   }
+	    
     }
 }
