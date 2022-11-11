@@ -46,7 +46,16 @@ pipeline {
                 nexusArtifactUploader artifacts: [[artifactId: 'myweb', classifier: '', file: 'target/newapp.war', type: 'war']], credentialsId: 'NexusPass', groupId: 'in.java.home', nexusUrl: '52.66.204.55:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-snapshots', version: '0.0.5'
             }
         }
-
+		
+	 stage('Deploy Approve') {
+		 steps {
+		 	echo "Taking approval from Manager for Deployment"
+			 timeout(time: 7, unit: 'DAYS') {
+			 	input message: 'Do you want to deploy?', submitter: 'admin'
+			 }
+		 }  
+	   }   
+	 
         stage('Deploy on Kubernetes') {
             steps {
 		echo "Deployment"
@@ -55,14 +64,7 @@ pipeline {
             }
         }
 	
-	 stage('Deploy Approve') {
-		 steps {
-		 	echo "Taking approval from Manager for Deployment"
-			 timeout(time: 7, unit: 'DAYS') {
-			 	input message: 'Do you want to deploy?', submitter: 'admin'
-			 }
-		 }  
-	   }
+	 
 	    
     }
 }
